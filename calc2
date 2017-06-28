@@ -1,0 +1,49 @@
+#!/usr/bin/env node
+
+// SAMPLE
+// D.1 === 5000 makes 350
+
+if (process.argv.length < 4) {
+	console.log("You should pass initial amout and number of days! e.g. 'calc 5000 5'");
+	return;
+}
+
+Number.prototype.asMoney = function() {
+	return `$${parseFloat(this).toFixed(2)}`;
+}
+
+const spaces = (n) => {
+	str = "";
+	for (let i = 0; i < n; i++) { str += " "; }
+	return str;
+}
+
+const businessDaysInAMonth = 20;
+
+const initialAmount = Number(process.argv[2]);
+const amountOfDays = Number(process.argv[3]);
+const dailyPercent = Number(process.argv[4]) || 7;
+
+let livingCost = Number(process.argv[5]) || 4000;
+
+let amount = initialAmount;	
+
+console.log(`\nGrowing ${dailyPercent}% per day during ${amountOfDays} days.\n`);
+
+for (let day = 1; day < amountOfDays + 1; day++)
+{
+	let dailyEarning = amount * (dailyPercent / 100);
+
+	console.log(`D.${day} ${spaces(4 - day.toString().length)}=> ${amount.asMoney()} makes ${dailyEarning.asMoney()}`);
+
+	if (day % businessDaysInAMonth === 0) {
+		console.log(`\nLIVING COST TAKEOUT: -${livingCost.asMoney()}\n`);
+		amount -= livingCost;
+		livingCost *= 1 + ((dailyPercent * 2) * (day / businessDaysInAMonth) / 100);
+	}
+
+	amount += dailyEarning;
+}
+
+console.log(`\nTOTAL EQUITY: ${amount.asMoney()}`);
+console.log(`TOTAL EQUITY GROWTH: ${(amount - initialAmount).asMoney()}\n`);

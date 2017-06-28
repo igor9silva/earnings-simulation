@@ -1,0 +1,51 @@
+#!/usr/bin/env node
+
+Number.prototype.asMoney = function() {
+	return `$${parseFloat(this).toFixed(2)}`;
+}
+
+// const multiplier = 15;
+// const dailyPercent = 0.05;
+// const businessDaysInAMonth = 20;
+
+// const monthlyPercent = 1;
+
+const initialAmount  = Number(process.argv[2]);
+const amountOfMonths = Number(process.argv[3]);
+const monthlyAdd     = Number(process.argv[4]);
+const monthlyPercent = Number(process.argv[5]) || 1;
+
+let amount = initialAmount;
+
+console.log(``);
+
+for (let month = 1; month < amountOfMonths + 1; month++)
+{
+	console.log(`===== M.${month} =================================`);
+
+	// let amountToInvest = amount * multiplier;
+	// console.log(`${amount.asMoney()} * ${multiplier} = ${amountToInvest.asMoney()} (amount to invest)`);
+
+	// let dailyEarning = amountToInvest * (dailyPercent / 100);
+	// console.log(`${dailyPercent}% of ${amountToInvest.asMoney()} = ${dailyEarning.asMoney()} (daily earning)`);
+
+	// let monthlyEarning = dailyEarning * businessDaysInAMonth;
+	// console.log(`${dailyEarning.asMoney()} * ${businessDaysInAMonth} = ${monthlyEarning.asMoney()} (monthly earning)\n`);
+
+	console.log(`Had: ${amount.asMoney()}`);
+	console.log(`Addition: ${monthlyAdd.asMoney()}`);
+
+	amount += monthlyAdd;
+
+	let earnings = amount * (monthlyPercent / 100);
+
+	console.log(`Earnings (${monthlyPercent}%): ${earnings.asMoney()}`);
+
+	amount += earnings;
+
+	console.log(`TOTAL MONTH EARNING: ${amount.asMoney()}`);
+	console.log(`===========================================\n\n`);
+}
+
+console.log(`TOTAL EQUITY: ${amount.asMoney()}`);
+console.log(`TOTAL EQUITY GROWTH: ${(amount - initialAmount).asMoney()}`);

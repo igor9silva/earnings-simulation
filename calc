@@ -1,0 +1,50 @@
+#!/usr/bin/env node
+
+// SAMPLE
+// ===== M.1 =================================
+// 5000 * 15 = 75000 (amount to invest)
+// 0,1% of 75000 = 75 (earning)
+// 75 * 20 (business days in a month) = 1500
+// ===========================================
+
+if (process.argv.length < 4) {
+	console.log("You should pass initial amout and number of months! e.g. 'calc 5000 5'");
+	return;
+}
+
+Number.prototype.asMoney = function() {
+	return `$${parseFloat(this).toFixed(2)}`;
+}
+
+const multiplier = 15;
+const dailyPercent = 0.05;
+const businessDaysInAMonth = 20;
+
+const initialAmount = Number(process.argv[2]);
+const amountOfMonths = Number(process.argv[3]);
+
+let amount = initialAmount;	
+
+console.log(``);
+
+for (let month = 1; month < amountOfMonths + 1; month++)
+{
+	console.log(`===== M.${month} =================================`);
+
+	let amountToInvest = amount * multiplier;
+	console.log(`${amount.asMoney()} * ${multiplier} = ${amountToInvest.asMoney()} (amount to invest)`);
+
+	let dailyEarning = amountToInvest * (dailyPercent / 100);
+	console.log(`${dailyPercent}% of ${amountToInvest.asMoney()} = ${dailyEarning.asMoney()} (daily earning)`);
+
+	let monthlyEarning = dailyEarning * businessDaysInAMonth;
+	console.log(`${dailyEarning.asMoney()} * ${businessDaysInAMonth} = ${monthlyEarning.asMoney()} (monthly earning)\n`);
+
+	console.log(`TOTAL MONTH EARNING: ${monthlyEarning.asMoney()}`);
+	console.log(`===========================================\n\n`);
+
+	amount += monthlyEarning;
+}
+
+console.log(`TOTAL EQUITY: ${amount.asMoney()}`);
+console.log(`TOTAL EQUITY GROWTH: ${(amount - initialAmount).asMoney()}`);
